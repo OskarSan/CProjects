@@ -6,12 +6,6 @@
 #include <sys/wait.h> 
 #include <signal.h>
 
-#define TIMEOUT 15
-
-void handle_alarm(int signo) {
-    printf("Timeout\n");
-    exit(EXIT_FAILURE);
-}
 
 int main(int argc, char *argv[]) {
  
@@ -19,17 +13,14 @@ int main(int argc, char *argv[]) {
     char *userInput = NULL;
     size_t len = 0;
     pid_t pid;  
-
-    signal(SIGALRM, handle_alarm);
+    char *path[] = {"/bin", "usr/bin", NULL};
 
     while(loop == 1){
         printf("wish$ ");
 
-        alarm(TIMEOUT);
-
+      
         if (getline(&userInput, &len, stdin) != -1) {
-            
-            alarm(0);
+       
             userInput[strcspn(userInput, "\n")] = '\0';
         
             if(strcmp(userInput, "exit") == 0){
@@ -43,10 +34,20 @@ int main(int argc, char *argv[]) {
             
                 }else if (pid == 0) {
                     
-                    execlp("/bin/sh", "sh", "-c", userInput, (char *) NULL);
-                    perror("execlp");
-                    exit(EXIT_FAILURE);
-
+                     char command[256];
+                    int found = 0;
+                    for (int i = 0; path[i] != NULL; i++) {
+                        snprintf(command, sizeof(command), "%s/%s", path[i], userInput);
+                        if (access(command, X_OK) == 0) {
+                            execlp(command, userInput, (char *) NULL);
+                            perror("execlp");
+                            exit(EXIT_FAILURE);
+                        }
+                    }
+                    if (!found) {
+                        fprintf(stderr, "Command not found: %s\n", userInput);
+                        exit(EXIT_FAILURE);
+                    }
                 }else {
                     wait(NULL);
 
