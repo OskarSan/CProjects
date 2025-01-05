@@ -87,7 +87,6 @@ int main(int argc, char *argv[]) {
                 }
 
             } else {
-                // Execute external command
                 execute_command(userInput, path);
             }
         }
