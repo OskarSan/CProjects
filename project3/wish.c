@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
     signal(SIGALRM, handle_alarm);
 
     while(loop == 1){
-        printf("sHell$ ");
+        printf("wish$ ");
 
         alarm(TIMEOUT);
 
