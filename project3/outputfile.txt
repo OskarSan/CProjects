@@ -1,6 +1,0 @@
-outputfile.txt
-test
-test.c
-test.txt
-wish
-wish.c
