@@ -21,16 +21,15 @@
 #include <fcntl.h>
 
 
-void printError() {
-    char error_message[30] = "An error has occurred\n";
-    write(STDERR_FILENO, error_message, strlen(error_message));
+void printError(const char*message) {
+    write(STDERR_FILENO, message, strlen(message));
 }
 
 // Execute a non built-in command
 void execute_command(char *userInput, char **path, char *outputFile) {
     pid_t pid = fork();
     if (pid == -1) {
-        printError();
+        printError("Error: Fork failed\n");
         exit(EXIT_FAILURE);
     } else if (pid == 0) {
         if (outputFile != NULL) {
@@ -39,7 +38,7 @@ void execute_command(char *userInput, char **path, char *outputFile) {
             int fd = open(outputFile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
             
             if (fd == -1) {
-                printError();
+                printError("Error: Cannot open file\n");
                 exit(EXIT_FAILURE);
             }
             dup2(fd, STDOUT_FILENO);
@@ -67,11 +66,12 @@ void execute_command(char *userInput, char **path, char *outputFile) {
             snprintf(command, sizeof(command), "%s/%s", path[i], args[0]);
             if (access(command, X_OK) == 0) {
                 execvp(command, args);
-                printError();
+                printError("Error: Execution failed\n");
                 exit(EXIT_FAILURE);
             }
         }
-        printError();
+        fprintf(stderr, "Error: Command not found: %s\n", args[0]);
+
         exit(EXIT_FAILURE);
     } else {
         wait(NULL);
@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
         input = fopen(argv[1], "r");
 
         if (input == NULL) {
-            printError();
+            printError("Error: Cannot open file\n");
             exit(EXIT_FAILURE);
         }
         batchExists = 1;
@@ -147,7 +147,7 @@ int main(int argc, char *argv[]) {
                 //required because the original is sent to the execute_command function later on
                 char *commandCopy = strdup(commands[i]);
                 if (commandCopy == NULL) {
-                    printError();
+                    printError("Error: Memory allocation failed\n");
                     continue;
                 }
                 // Tokenize user input
@@ -170,7 +170,7 @@ int main(int argc, char *argv[]) {
                     if (dir == NULL || strtok(NULL, " ") != NULL) {
                         fprintf(stderr, "cd: wrong number of arguments\n");
                     } else if (chdir(dir) != 0) {
-                        printError();
+                        printError("Error: Cannot change directory\n");
                     }
                 } else if (strcmp(token, "path") == 0) {
                     int i = 0;
@@ -183,7 +183,7 @@ int main(int argc, char *argv[]) {
                     if (getcwd(cwd, sizeof(cwd)) != NULL) {
                         printf("%s$ \n", cwd);
                     } else {
-                        printError();
+                        printError("Error: Cannot get current directory\n");
                         exit(EXIT_FAILURE);
                     }
                 //if command is not built-in, execute it
