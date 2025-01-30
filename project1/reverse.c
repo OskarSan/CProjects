@@ -18,6 +18,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+//Function to read a string from the file
+//creates a buffer for a line with malloc
 void readString(FILE *file, char **buffer) {
     size_t size = 0;
     size_t capacity = 256;
@@ -28,6 +30,7 @@ void readString(FILE *file, char **buffer) {
     }
 
     int ch;
+    //reads characters until EOF or newline
     while ((ch = fgetc(file)) != EOF && ch != '\n') {
         if (size + 1 >= capacity) {
             capacity *= 2;
@@ -43,14 +46,14 @@ void readString(FILE *file, char **buffer) {
 }
 
 
-
+//structure of a linked list node
 struct Node {
     char* data;
     struct Node* next;
 };
 
 
-
+//function to create a new node
 struct Node* createNode(char* data) {
     //printf("Creating node: %s\n", data);
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
@@ -59,6 +62,7 @@ struct Node* createNode(char* data) {
     return newNode;
 }
 
+//insert a node at the beginning of the list
 void insert(struct Node** head, char* data) {
     //printf("Inserting: %s\n", data);
     struct Node* newNode = createNode(data);
@@ -66,7 +70,7 @@ void insert(struct Node** head, char* data) {
     *head = newNode;
 }
 
-
+//traverse list and print file to file or stdout
 void traverseList(struct Node* head, char* file) {
     
     struct Node* temp = head;
@@ -96,13 +100,12 @@ void traverseList(struct Node* head, char* file) {
 
 }
 
-
 int main( int argc, char *argv[] ) {
 
     FILE *file;
     char *buffer = NULL;
     struct Node* head = NULL;
-    
+    //checks the correct input
     if( argc < 2 ) {
         fprintf(stderr, "No file provided\n");
         return 1;
@@ -120,7 +123,7 @@ int main( int argc, char *argv[] ) {
         fprintf(stderr, "Unable to open file\n" );
         return 1;
     }
-    
+    //read each line from the file and insert to the linked list
     while (!feof(file)) {
         readString(file, &buffer);
         //printf("Read: %s\n", buffer);
@@ -135,7 +138,7 @@ int main( int argc, char *argv[] ) {
     fclose(file);
 
 
-
+    //print the linked list to the correct output
     if(argv[2] != NULL) {
         printf("Printing to file: %s\n", argv[2]);
         traverseList(head, argv[2]);
@@ -143,7 +146,7 @@ int main( int argc, char *argv[] ) {
         traverseList(head, NULL);
     }
 
-
+    //free the memory
     struct Node* temp;
     while (head != NULL) {
         temp = head;
