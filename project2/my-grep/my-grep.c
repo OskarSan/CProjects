@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-void grepStream(FILE *stream, const char *searchTerm) {
+void grepFile(FILE *file, const char *searchTerm) {
     char *line = NULL;
     size_t len = 0;
     ssize_t read;
-
-    while ((read = getline(&line, &len, stream)) != -1) {
+    //Reads and prints lines that match searchTerm from file
+    while ((read = getline(&line, &len, file)) != -1) {
         if (strstr(line, searchTerm) != NULL) {
             printf("%s", line);
         }
@@ -19,7 +19,7 @@ void grepStream(FILE *stream, const char *searchTerm) {
 int main(int argc, char *argv[]) {
     if (argc < 2) {
        
-        printf("my-grep: searchterm [file ...]\n"); // No search term specified -> print message and exit with status code 1
+        printf("my-grep: searchterm [file ...]\n");// No search term specified -> print message and exit with status code 1
         return 1;
     }
 
@@ -27,20 +27,20 @@ int main(int argc, char *argv[]) {
 
     if (argc == 2) {
         // No files specified so read from stdin
-        grepStream(stdin, searchTerm);
+        grepFile(stdin, searchTerm);
     } else {
         for (int i = 2; i < argc; i++) {
             FILE *file = fopen(argv[i], "r");
             if (file == NULL) {
                 
-                printf("my-grep: cannot open file\n");// Error opening file print message and exit with status code 1
+                printf("my-grep: cannot open file\n");//Error opening file print message and exit with status code 1
                 return 1;
             }
 
-            grepStream(file, searchTerm);
+            grepFile(file, searchTerm);
             fclose(file);
         }
     }
 
-    return 0;// Return 0 -> ran successfully
+    return 0;//Return 0 -> ran successfully
 }
