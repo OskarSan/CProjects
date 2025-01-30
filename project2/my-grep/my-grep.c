@@ -1,3 +1,15 @@
+/*
+    AI USE STATEMENT
+    Lassi Tuominen
+    001119893
+
+    Github Copilot was used for fixing and verifying 
+    the syntax in the code, 
+    as well as explaining some of the used functions and their parameters.
+
+    Other AI tools were not used.
+
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
