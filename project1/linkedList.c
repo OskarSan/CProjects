@@ -4,8 +4,7 @@
     000471121
 
     Github Copilot was used for fixing and verifying 
-    the syntax in the code, 
-    as well as explaining some of the used functions end their parameters.
+    the syntax in the code.
 
     Other AI tools were not used.
 
