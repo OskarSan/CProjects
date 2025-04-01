@@ -25,8 +25,13 @@ DIY implementations of some UNIX utilities which include:
 
 A simple Unix Shell which is able to handle:
   -path variables
+  
   -built-in Unix commands
+  
   -custom commands
+  
   -redirection
+ 
   -parallel commands
+  
   -proper error messages
