@@ -8,10 +8,12 @@ Results on all the projects can be found from the docs
 
 
 
-**Project 1**
+*Project 1*
+
 a simply linked list created for reversing a string
 
 **Project 2**
+
 DIY implementations of some UNIX utilities which include:
  -cat
  -grep
@@ -19,6 +21,7 @@ DIY implementations of some UNIX utilities which include:
  -unzip
 
 **Project 3**
+
 A simple Unix Shell which is able to handle:
   -path variables
   -built-in Unix commands
