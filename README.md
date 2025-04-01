@@ -16,9 +16,13 @@ a simply linked list created for reversing a string
 ## Project 2
 
 DIY implementations of some UNIX utilities which include:
+ 
  -cat
+ 
  -grep
+ 
  -zip
+ 
  -unzip
 
 ## Project 3
