@@ -24,6 +24,7 @@ DIY implementations of some UNIX utilities which include:
 ## Project 3
 
 A simple Unix Shell which is able to handle:
+  
   -path variables
   
   -built-in Unix commands
